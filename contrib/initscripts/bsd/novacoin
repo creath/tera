@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: TeraCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# TeraCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable TeraCoin service.
+# TeraCoin_config (path): Set to /usr/local/etc/TeraCoin.conf by default.
+# TeraCoin_user:  The user account TeraCoin daemon runs as. It uses 'root' user by default.
+# TeraCoin_group: The group account TeraCoin daemon runs as. It uses 'wheel' group by default.
+# TeraCoin_datadir (str): Default to "/var/db/TeraCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=TeraCoin
+rcvar=TeraCoin_enable
+
+: ${TeraCoin_enable:=NO}
+: ${TeraCoin_config=/usr/local/etc/TeraCoin.conf}
+: ${TeraCoin_datadir=/var/db/TeraCoin}
+: ${TeraCoin_user="root"}
+: ${TeraCoin_group="wheel"}
+
+required_files=${TeraCoin_config}
+command=/usr/local/bin/TeraCoind
+TeraCoin_chdir=${TeraCoin_datadir}
+pidfile="${TeraCoin_datadir}/TeraCoind.pid"
+stop_cmd=TeraCoin_stop
+command_args="-conf=${TeraCoin_config} -datadir=${TeraCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+TeraCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${TeraCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${TeraCoin_user}:${TeraCoin_group} ${TeraCoin_datadir}
+}
+
+TeraCoin_prestart()
+{
+	if [ ! -d "${TeraCoin_datadir}/." ]; then
+		TeraCoin_create_datadir || return 1
+	fi
+}
+
+TeraCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+TeraCoin_stop()
+{
+    TeraCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${TeraCoin_config} -datadir=${TeraCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

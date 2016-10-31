@@ -1,0 +1,2 @@
+debian/bin/TeraCoind usr/bin
+src/TeraCoind usr/lib/TeraCoin

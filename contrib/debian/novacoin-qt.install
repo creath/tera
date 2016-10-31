@@ -1,0 +1,5 @@
+TeraCoin-qt usr/bin
+share/pixmaps/TeraCoin32.xpm usr/share/pixmaps
+share/pixmaps/TeraCoin80.xpm usr/share/pixmaps
+debian/TeraCoin-qt.desktop usr/share/applications
+debian/TeraCoin-qt.protocol usr/share/kde4/services/

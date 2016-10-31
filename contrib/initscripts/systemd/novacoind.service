@@ -1,0 +1,11 @@
+[Unit]
+Description=TeraCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=TeraCoin
+ExecStart=/opt/TeraCoin/TeraCoind
+
+[Install]
+WantedBy=multi-user.target

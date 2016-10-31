@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=TeraCoin
+Comment=TeraCoin P2P Cryptocurrency
+Comment[ru]=TeraCoin, P2P криптовалюта
+Comment[fr]=TeraCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=TeraCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/TeraCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/TeraCoin80.xpm
+MimeType=x-scheme-handler/TeraCoin;
+Categories=Office;
